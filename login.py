@@ -1,17 +1,20 @@
 import re
 from playwright.sync_api import Page, expect
+import time
 
-def test_has_title(page: Page):
-    page.goto("https://playwright.dev/")
-
-    # Expect a title "to contain" a substring.
-    expect(page).to_have_title(re.compile("Playwright"))
-
-def test_get_started_link(page: Page):
-    page.goto("https://playwright.dev/")
-
-    # Click the get started link.
-    page.get_by_role("link", name="Get started").click()
-
-    # Expects page to have a heading with the name of Installation.
-    expect(page.get_by_role("heading", name="Installation")).to_be_visible()
+def test_login(page: Page):
+    # page.chromium.launch(headless=False, args=["--start-maximized"])
+    # context = page.new_context(no_viewport=True)
+    # page = context.new_page()
+    page.goto("https://www.fullybookedonline.com/")
+    page.get_by_label("Open my account").click()
+    page.get_by_placeholder("Enter your email", exact=True).click()
+    page.get_by_placeholder("Enter your email", exact=True).fill("btad@fullybookedonline.com")
+    page.get_by_placeholder("Enter your password").click()
+    page.get_by_placeholder("Enter your password").click()
+    page.get_by_placeholder("Enter your password").fill("@HOsOCRmzkt4ngZ0YIaKj")
+    page.get_by_role("button", name="LOGIN").click()
+    time.sleep(5)
+    page.get_by_label("Open my account").click()
+    expect(page.get_by_role("title", name="My Account"))
+    time.sleep(3)
