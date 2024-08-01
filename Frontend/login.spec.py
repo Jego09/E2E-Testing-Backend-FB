@@ -14,7 +14,7 @@ def test_login(page: Page):
     page.get_by_placeholder("Enter your password").click()
     page.get_by_placeholder("Enter your password").fill("@HOsOCRmzkt4ngZ0YIaKj")
     page.get_by_role("button", name="LOGIN").click()
-    time.sleep(5)
+    time.sleep(10)
     page.get_by_label("Open my account").click()
     expect(page.get_by_role("title", name="My Account"))
     time.sleep(3)
