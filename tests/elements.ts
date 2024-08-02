@@ -1,5 +1,5 @@
 export const elements = {
-    baseUrl:  'https://www.fullybookedonline.com',
+    baseURL:  'https://www.fullybookedonline.com',
 }
 
 
