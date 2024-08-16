@@ -1,0 +1,19 @@
+Install dotenv first, then import your .env files to your playwright.config.ts. Its important to remember that .env files should be in the same directory as package.json file. 
+
+#.env_prod
+BASE_URL =
+BACKEND_URL= 
+FB_USERNAME= 
+FB_PASSWORD= 
+ADMIN_USERNAME=
+ADMIN_PASSWORD=
+CP_NUMBER=
+
+#Staging
+STAGING_BASE_URL =
+STAGING_BACKEND_URL=
+STAGING_FB_USERNAME=
+STAGING_FB_PASSWORD= 
+STAGING_ADMIN_USERNAME=
+STAGING_ADMIN_PASSWORD= 
+STAGING_CP_NUMBER=
