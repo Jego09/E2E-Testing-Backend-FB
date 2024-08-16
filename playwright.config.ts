@@ -1,11 +1,8 @@
 import { defineConfig, devices } from '@playwright/test';
 
-/**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
-// import dotenv from 'dotenv';
-// dotenv.config({ path: path.resolve(__dirname, '.env') });
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -25,11 +22,13 @@ export default defineConfig({
   // Each test is given 30 seconds.
   timeout: 30000,
   // Folder for test artifacts such as screenshots, videos, traces, etc.
-  // outputDir: 'test-results',
+  outputDir: './test-results',
+
+
 
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: 'https://www.fullybookedonline.com/',
+    // baseURL: 'https://www.fullybookedonline.com/',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
@@ -71,6 +70,12 @@ export default defineConfig({
     //   name: 'Google Chrome',
     //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
     // },
+    {
+      name: 'setup db',
+      testMatch: /global\.setup\.ts/,
+    },
+
+
   ],
 
   /* Run your local dev server before starting the tests */

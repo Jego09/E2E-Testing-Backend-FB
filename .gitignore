@@ -7,3 +7,14 @@ node_modules/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+.env
+.env.staging
+.env.production
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
