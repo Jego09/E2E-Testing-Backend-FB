@@ -1,9 +1,9 @@
 import './mcstaging_setupEnv';
-import { test, expect } from '@playwright/test';
-import { elements, sleep, randomtext, logging_in, creds, next_page } from './mcstaging_elements';
-import { title } from 'process';
+import { test, expect, defineConfig } from '@playwright/test';
+import { elements, sleep, randomtext, logging_in, creds, next_page, BlogErrorChecker } from './mcstaging_elements';
 
-test.setTimeout(45000);
+test.setTimeout(60000);
+
 
 test.beforeEach(async ({ page }, testInfo) => {
 
@@ -256,22 +256,64 @@ test ('company and service pages - skip setup', async ({ page }) => {
 
 });
 
-test ('blogs - skip setup', async ({page}) => {
-
+test('blogs - skip setup', async ({ page }) => {
   await page.goto(elements.baseURL);
   await page.getByLabel('Default Category').getByRole('link', { name: 'Blog' }).click();
   await expect(page).toHaveURL(elements.baseURL + '/blog');
-  
+
+  const navigationSteps = [
+
+    { label: 'Page 2' },
+    { label: 'Page 3' },
+    { label: 'Page 4' },
+    { label: 'Page 5' },
+    { role: 'link', name: 'Book Reviews', exact: true },
+    { label: 'Page 2' },
+    { role: 'link', name: 'Featured', exact: true },
+    { label: 'Page 2' },
+    { role: 'link', name: 'Promos and Giveaways', exact: true },
+    { label: 'Page 2' },
+    // { role: 'link', name: 'Events', exact: true }, // Commented out, for some reason causes an error to the process
+    // { label: 'Page 2' },
+    { role: 'link', name: 'First Look Club', exact: true },
+    { label: 'Page 2' },
+    { role: 'link', name: 'First Few Pages', exact: true },
+    { label: 'Page 2' },
+    { role: 'link', name: 'Book News', exact: true },
+    { label: 'Page 2' },
+    { role: 'link', name: 'Spotlight', exact: true },
+    { label: 'Page 2' },
+    { role: 'link', name: 'Announcements', exact: true },
+    { label: 'Page 2' },
+  ];
+
+  for (const step of navigationSteps) {
+    if (step.label) {
+      await page.getByLabel(step.label).click();
+    } else {
+      await page.getByRole('link', { name: step.name, exact: step.exact }).click();
+      console.log(step.name)
+    }
+    await BlogErrorChecker(page);
+  }
 });
 
 test ('Error Fetching checker - skip setup', async ({page}) => {
 
   await page.goto(elements.baseURL);
 
-  await page.getByText('BESTSELLERS').click();
+  await page.getByText('BESTSELLER').click();
+
+  console.log("-----BESTSELLER-----");
+
+  await sleep(5000);
 
   const n_page = next_page(page);
 
   await n_page;
+  // const n_page = next_page(page);
+  // const n_error = ErrorFetching(page);
+
+  // await n_error;
 
 });

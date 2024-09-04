@@ -1,4 +1,6 @@
 import './prod_setupEnv';
+import * as fs from 'fs';
+import * as path from 'path';
 
 // const adminURL = FB_USERNAME;
 export const creds = {
@@ -65,33 +67,35 @@ export async function logging_in(page: any) {
 
 export async function next_page(page: any): Promise<void> {
     try {
-
         let pageNumber = 1;
-        let maxPage = 10;
-
+        const maxPage = 10;
+  
         while (pageNumber <= maxPage) {
-
             const pageStr = `Page ${pageNumber}`;
             const errorMessageLocator = page.getByText('Error fetching Product List!');
-
+  
             try {
-
-                if (await errorMessageLocator.isVisible({ timeout: 5000 })) {
+                if (await errorMessageLocator.isVisible()) {
                     await page.screenshot({ path: `error_page_${pageNumber}.png` });
                     console.log("Error Detected");
                     console.error(`Error occurred on page ${pageNumber}`);
-                    page.close();
-                    break;
+                    break; // Exit the loop if an error is detected
+                } else {
+                    // Wait for the element to be visible
+                    const element = page.locator(`a[aria-label="${pageStr}"]`);
+                    await element.waitFor({ state: 'visible', timeout: 30000 });
+  
+                    await element.click();
+                    console.log(`Clicked page ${pageNumber}`);
+                    pageNumber++;
                 }
-                else {
-                // Wait for the element to be visible
-                const element = page.locator(`a[aria-label="${pageStr}"]`);
-                await element.waitFor({ state: 'visible', timeout: 40000 });
-                
-                await element.click();
-                console.log(`Clicked page ${pageNumber}`);
-                pageNumber++;
+  
+                // Check if max page has been reached
+                if (pageNumber > maxPage) {
+                    console.log(`Max page reached: ${maxPage}`);
+                    break; // Exit the loop after reaching the max page
                 }
+  
             } catch (error) {
                 console.log("Element not found, stopping pagination.");
                 break;
@@ -99,5 +103,54 @@ export async function next_page(page: any): Promise<void> {
         }
     } catch (error) {
         console.error("Error occurred during pagination:", error);
+    } finally {
+        await page.close(); // Ensure the page is closed once the loop ends
     }
-}
+  };
+
+export async function BlogErrorChecker(page: any) {
+
+    let random = randomtext("5");
+    let url = page.url();
+
+    const directory = './BLOG_screenshots';
+    const fileName = `${random}.png`; // Your dynamic file name
+    const filePath = path.join(directory, fileName); // Combine them into a full path
+    
+
+    if (!fs.existsSync(directory)) {
+        fs.mkdirSync(directory);
+      }
+
+        const errorMessageLocator = page.getByText('Error fetching Blog!').first();
+
+        if (await errorMessageLocator.isVisible()) {
+            console.log("Error Detected: " + url);
+            await page.screenshot({ path: filePath,  fullPage: true });
+            return;
+        }
+    };
+
+export async function ErrorFetching(page: any) {
+
+    let random = randomtext("5");
+    let url = page.url();
+
+    const directory = './ErrorFetching_screenshots';
+    const fileName = `${random}.png`; // Your dynamic file name
+    const filePath = path.join(directory, fileName); // Combine them into a full path
+    
+
+    if (!fs.existsSync(directory)) {
+        fs.mkdirSync(directory);
+      }
+
+        const errorMessageLocator = page.getByText('Error fetching Product List!').first();
+
+        if (await errorMessageLocator.isVisible()) {
+            console.log("Error Detected: " + url);
+            await page.screenshot({ path: filePath,  fullPage: true });
+            return;
+        }
+    };
+

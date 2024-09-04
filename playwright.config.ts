@@ -1,6 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
 import * as dotenv from 'dotenv';
+
 dotenv.config();
 
 
@@ -22,7 +23,7 @@ export default defineConfig({
   // Each test is given 30 seconds.
   timeout: 30000,
   // Folder for test artifacts such as screenshots, videos, traces, etc.
-  outputDir: './test-results',
+  outputDir: './screenshots',
 
 
 
