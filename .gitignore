@@ -18,3 +18,7 @@ node_modules/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+/staging_screenshots/
+/screenshots/
+/ErrorFetching_screenshots/
+/BLOG_sceenshots/

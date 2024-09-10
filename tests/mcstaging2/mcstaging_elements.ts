@@ -69,43 +69,51 @@ export async function logging_in(page: any) {
 
 export async function next_page(page: any): Promise<void> {
 
-      let pageNumber = 1;
-      const maxPage = 10;
-      let random = randomtext("5");
-      let url = page.url();
-      const errorMessageLocator = page.getByText('Error fetching Product List!').first();
+    let pageNumber = 1;
+    const maxPage = 10;
+    let random = randomtext("5");
+    let url = page.url();
+    const errorMessageLocator = page.getByText('Error fetching Product List!').first();
 
-      const directory = './ErrorFetching_screenshots';
-      const fileName = `${random}.png`; // Your dynamic file name
-      const filePath = path.join(directory, fileName); // Combine them into a full path
-      
-  
-      if (!fs.existsSync(directory)) {
-          fs.mkdirSync(directory);
+    const directory = './ErrorFetching_screenshots';
+    const fileName = `${random}.png`; // dynamic file name
+    const filePath = path.join(directory, fileName); // Combines directory & filename into a full path
+    
+
+    if (!fs.existsSync(directory)) {
+        fs.mkdirSync(directory);
+    }
+
+    while (pageNumber <= maxPage) {
+
+        const pageStr = `Page ${pageNumber}`;
+
+        const element = page.locator(`a[aria-label="${pageStr}"]`);
+        await element.waitFor({ state: 'visible' });
+
+        await element.click();
+        console.log(`Clicked page ${pageNumber}`);
+        pageNumber++;
+        
+        }
+        if (await errorMessageLocator.isVisible()) {
+            console.log("Error Detected: " + url);
+            await page.screenshot({ path: filePath,  fullPage: true });
+            return;
+        }
+        // Check if max page has been reached
+        if (pageNumber >= maxPage) {
+            console.log(`Max page reached: ${maxPage}`);
+            return; 
         }
 
-      while (pageNumber <= maxPage) {
-
-          const pageStr = `Page ${pageNumber}`;
-
-                  // Wait for the element to be visible
-                  const element = page.locator(`a[aria-label="${pageStr}"]`);
-                  await element.waitFor({ state: 'visible', timeout: 30000 });
-
-                  await element.click();
-                  console.log(`Clicked page ${pageNumber}`);
-                  pageNumber++;
-              }
-              if (await errorMessageLocator.isVisible()) {
-                console.log("Error Detected: " + url);
-                await page.screenshot({ path: filePath,  fullPage: true });
-                return;
-            }
-              // Check if max page has been reached
-              if (pageNumber >= maxPage) {
-                  console.log(`Max page reached: ${maxPage}`);
-                  return; // Exit the loop after reaching the max page
-              }
+        const nextElement = page.locator(`a[aria-label="Page ${pageNumber}"]`);
+    
+        if (!(await nextElement.isVisible({timeout: 3000}))) {
+            console.log('There are no more pages');
+            return;
+        }
+        
 };
 
 export async function BlogErrorChecker(page: any) {
@@ -130,3 +138,9 @@ export async function BlogErrorChecker(page: any) {
         return;
     }
 };
+
+export async function SortBy (page: any) {
+
+    await page.locator('xpath=//*[@id="category-sort_wrapper"]/div').click();
+    await page.locator('xpath=//*[@id="oASC newest"]').click();
+}

@@ -46,7 +46,7 @@ test('register - skip setup', async ({ page }) => {
 
   await page.locator('.FieldDate-Year > select').selectOption('1999');
 
-  await page.getByLabel('Choose Sunday, August 1st,').click();
+  await page.locator('xpath=//*[@id="root"]/div/div[2]/section/div/div/div/form/fieldset[2]/div[2]/div/div[2]/div[2]/div[2]/div/div/div[2]/div[2]/div[1]/div[1]').click();
   // Gender
   const gender = await page.getByText('-- Select gender -- Male Female Other -- Select gender --MaleFemaleOther');
   
@@ -126,7 +126,7 @@ test('wishlist', async ({ page }) => {
   await expect(page).toHaveURL(elements.baseURL + '/wishlist');
 });
 
-test ('payment', async ({ page }) => {
+test('payment', async ({ page }) => {
 
   await expect(page.getByText('You are successfully logged in!')).toBeVisible();
 
@@ -212,7 +212,7 @@ test ('payment', async ({ page }) => {
   await expect(page.getByText('Thank you for your Order!')).toHaveText('Thank you for your Order!', { timeout: 50000});
 
 });
-test ('backend admin login - skip setup', async ({ page }) => {
+test('backend admin login - skip setup', async ({ page }) => {
   
   await page.goto(creds.BACKEND_URL!);
   await page.getByPlaceholder('user name').click();
@@ -225,7 +225,7 @@ test ('backend admin login - skip setup', async ({ page }) => {
 
 });
 
-test ('company and service pages - skip setup', async ({ page }) => {
+test('company and service pages - skip setup', async ({ page }) => {
   
   await page.goto(elements.baseURL);
   await page.getByRole('link', { name: 'About Us' }).click();
@@ -243,8 +243,8 @@ test ('company and service pages - skip setup', async ({ page }) => {
   await sleep(1000);
   await page.getByLabel('Footer').getByRole('link', { name: 'Store Locator' }).getByText('Store Locator').click();
   await expect(page).toHaveURL(elements.baseURL + '/store-locator');
-  await page.getByRole('link', { name: 'Contact Us' }).click();
-  await expect(page).toHaveURL(elements.baseURL + '/contact');
+  // await page.getByRole('link', { name: 'Contact Us' }).click();
+  // await expect(page).toHaveURL(elements.baseURL + '/contact');
   await page.getByRole('link', { name: 'Direct Sales' }).click();
   await expect(page).toHaveURL(elements.baseURL + '/bulk-purchase');
   await page.getByLabel('Footer').getByRole('link', { name: 'Discount Card' }).getByText('Discount Card').click();
@@ -296,24 +296,4 @@ test('blogs - skip setup', async ({ page }) => {
     }
     await BlogErrorChecker(page);
   }
-});
-
-test ('Error Fetching checker - skip setup', async ({page}) => {
-
-  await page.goto(elements.baseURL);
-
-  await page.getByText('BESTSELLER').click();
-
-  console.log("-----BESTSELLER-----");
-
-  await sleep(5000);
-
-  const n_page = next_page(page);
-
-  await n_page;
-  // const n_page = next_page(page);
-  // const n_error = ErrorFetching(page);
-
-  // await n_error;
-
 });

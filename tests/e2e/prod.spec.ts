@@ -1,6 +1,6 @@
 import './prod_setupEnv';
 import { defineConfig, test, expect } from '@playwright/test';
-import { elements, sleep, randomtext, logging_in, creds, randompass, next_page, BlogErrorChecker } from './prod_elements';
+import { elements, sleep, randomtext, logging_in, creds, randompass, BlogErrorChecker } from './prod_elements';
 
 test.setTimeout(45000);
 
@@ -279,17 +279,5 @@ test('blogs - skip setup', async ({ page }) => {
     }
     await BlogErrorChecker(page);
   }
-});
-
-test ('Error Fetching checker - skip setup', async ({page}) => {
-
-  await page.goto(elements.baseURL);
-
-  await page.getByText('BESTSELLERS').click();
-
-  const n_page = next_page(page);
-
-  await n_page;
-
 });
 

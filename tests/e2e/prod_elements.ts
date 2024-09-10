@@ -66,47 +66,53 @@ export async function logging_in(page: any) {
 
 
 export async function next_page(page: any): Promise<void> {
-    try {
-        let pageNumber = 1;
-        const maxPage = 10;
-  
-        while (pageNumber <= maxPage) {
-            const pageStr = `Page ${pageNumber}`;
-            const errorMessageLocator = page.getByText('Error fetching Product List!');
-  
-            try {
-                if (await errorMessageLocator.isVisible()) {
-                    await page.screenshot({ path: `error_page_${pageNumber}.png` });
-                    console.log("Error Detected");
-                    console.error(`Error occurred on page ${pageNumber}`);
-                    break; // Exit the loop if an error is detected
-                } else {
-                    // Wait for the element to be visible
-                    const element = page.locator(`a[aria-label="${pageStr}"]`);
-                    await element.waitFor({ state: 'visible', timeout: 30000 });
-  
-                    await element.click();
-                    console.log(`Clicked page ${pageNumber}`);
-                    pageNumber++;
-                }
-  
-                // Check if max page has been reached
-                if (pageNumber > maxPage) {
-                    console.log(`Max page reached: ${maxPage}`);
-                    break; // Exit the loop after reaching the max page
-                }
-  
-            } catch (error) {
-                console.log("Element not found, stopping pagination.");
-                break;
-            }
-        }
-    } catch (error) {
-        console.error("Error occurred during pagination:", error);
-    } finally {
-        await page.close(); // Ensure the page is closed once the loop ends
+
+    let pageNumber = 1;
+    const maxPage = 10;
+    let random = randomtext("5");
+    let url = page.url();
+    const errorMessageLocator = page.getByText('Error fetching Product List!').first();
+
+    const directory = './ErrorFetching_screenshots';
+    const fileName = `${random}.png`; // dynamic file name
+    const filePath = path.join(directory, fileName); // Combines directory & filename into a full path
+    
+
+    if (!fs.existsSync(directory)) {
+        fs.mkdirSync(directory);
     }
-  };
+
+    while (pageNumber <= maxPage) {
+
+        const pageStr = `Page ${pageNumber}`;
+
+        const element = page.locator(`a[aria-label="${pageStr}"]`);
+        await element.waitFor({ state: 'visible' });
+
+        await element.click();
+        console.log(`Clicked page ${pageNumber}`);
+        pageNumber++;
+        
+        }
+        if (await errorMessageLocator.isVisible()) {
+            console.log("Error Detected: " + url);
+            await page.screenshot({ path: filePath,  fullPage: true });
+            return;
+        }
+        // Check if max page has been reached
+        if (pageNumber >= maxPage) {
+            console.log(`Max page reached: ${maxPage}`);
+            return; 
+        }
+
+        const nextElement = page.locator(`a[aria-label="Page ${pageNumber}"]`);
+    
+        if (!(await nextElement.isVisible({timeout: 3000}))) {
+            console.log('There are no more pages');
+            return;
+        }
+        
+};
 
 export async function BlogErrorChecker(page: any) {
 
@@ -131,26 +137,11 @@ export async function BlogErrorChecker(page: any) {
         }
     };
 
-export async function ErrorFetching(page: any) {
 
-    let random = randomtext("5");
-    let url = page.url();
+export async function SortBy (page: any) {
 
-    const directory = './ErrorFetching_screenshots';
-    const fileName = `${random}.png`; // Your dynamic file name
-    const filePath = path.join(directory, fileName); // Combine them into a full path
-    
+    await page.locator('xpath=//*[@id="category-sort_wrapper"]/div').click();
+    await page.locator('xpath=//*[@id="oASC newest"]').click();
+}
 
-    if (!fs.existsSync(directory)) {
-        fs.mkdirSync(directory);
-      }
-
-        const errorMessageLocator = page.getByText('Error fetching Product List!').first();
-
-        if (await errorMessageLocator.isVisible()) {
-            console.log("Error Detected: " + url);
-            await page.screenshot({ path: filePath,  fullPage: true });
-            return;
-        }
-    };
 

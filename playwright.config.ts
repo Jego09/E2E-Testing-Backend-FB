@@ -9,6 +9,7 @@ dotenv.config();
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
+
   testDir: './tests',
   /* Run tests in files in parallel */
   fullyParallel: true,
@@ -72,8 +73,7 @@ export default defineConfig({
     //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
     // },
     {
-      name: 'setup db',
-      testMatch: /global\.setup\.ts/,
+
     },
 
 
