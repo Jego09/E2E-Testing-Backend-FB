@@ -15,8 +15,6 @@ test('Error Fetching / Bestsellers', async ({page}) => {
 
   console.log("-----BESTSELLER-----");
 
-  await sleep(5000);
-
   const sort = SortBy(page);
 
   await sort;
@@ -34,8 +32,6 @@ test('Error Fetching / Collections', async ({page}) => {
   await page.getByRole('link', { name: 'COLLECTIONS', exact: true }).click();
 
   console.log("-----COLLECTIONS-----");
-
-  await sleep(5000);
 
   const sort = SortBy(page);
 
@@ -55,8 +51,6 @@ test('Error Fetching / New', async ({page}) => {
 
   console.log("-----NEW-----");
 
-  await sleep(5000);
-
   const sort = SortBy(page);
 
   await sort;
@@ -75,8 +69,6 @@ test('Error Fetching / Pre-Order', async ({page}) => {
 
   console.log("-----PRE-ORDERS-----");
 
-  await sleep(5000);
-
   const sort = SortBy(page);
 
   await sort;
@@ -94,8 +86,6 @@ test('Error Fetching / Sale', async ({page}) => {
   await page.getByRole('link', { name: 'SALE', exact: true }).click();
 
   console.log("-----SALE-----");
-
-  await sleep(5000);
 
   const sort = SortBy(page);
 
