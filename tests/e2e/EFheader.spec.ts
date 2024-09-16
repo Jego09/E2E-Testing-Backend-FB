@@ -96,5 +96,3 @@ test('Error Fetching / Sale', async ({page}) => {
   await n_page;
   
 });
-
-

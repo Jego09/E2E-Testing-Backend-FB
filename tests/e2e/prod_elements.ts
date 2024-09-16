@@ -109,7 +109,7 @@ export async function next_page(page: any): Promise<void> {
     
         if (!(await nextElement.isVisible({timeout: 3000}))) {
             console.log('There are no more pages');
-            return;
+            page.close();
         }
         
 };
