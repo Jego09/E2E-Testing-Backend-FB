@@ -73,14 +73,14 @@ export async function next_page(page: any): Promise<void> {
     let url = page.url();
     const errorMessageLocator = page.getByText('Error fetching Product List!').first();
 
-    const directory = './ErrorFetching_screenshots';
-    const fileName = `${random}.png`; // dynamic file name
-    const filePath = path.join(directory, fileName); // Combines directory & filename into a full path
+    // const directory = './ErrorFetching_screenshots';
+    // const fileName = `${random}.png`; // dynamic file name
+    // const filePath = path.join(directory, fileName); // Combines directory & filename into a full path
     
 
-    if (!fs.existsSync(directory)) {
-        fs.mkdirSync(directory);
-    }
+    // if (!fs.existsSync(directory)) {
+    //     fs.mkdirSync(directory);
+    // }
 
     while (pageNumber <= maxPage) {
 
@@ -95,9 +95,8 @@ export async function next_page(page: any): Promise<void> {
         
         }
         if (await errorMessageLocator.isVisible()) {
-            console.log("Error Detected: " + url);
-            await page.screenshot({ path: filePath,  fullPage: true });
-            return;
+            // await page.screenshot({ path: filePath,  fullPage: true });
+            throw new Error("Error Detected: " + url);
         }
         // Check if max page has been reached
         if (pageNumber >= maxPage) {
@@ -119,21 +118,20 @@ export async function BlogErrorChecker(page: any) {
     let random = randomtext("5");
     let url = page.url();
 
-    const directory = './BLOG_screenshots';
-    const fileName = `${random}.png`; // Your dynamic file name
-    const filePath = path.join(directory, fileName); // Combine them into a full path
+    // const directory = './BLOG_screenshots';
+    // const fileName = `${random}.png`; // Your dynamic file name
+    // const filePath = path.join(directory, fileName); // Combine them into a full path
     
 
-    if (!fs.existsSync(directory)) {
-        fs.mkdirSync(directory);
-      }
+    // if (!fs.existsSync(directory)) {
+    //     fs.mkdirSync(directory);
+    //   }
 
         const errorMessageLocator = page.getByText('Error fetching Blog!').first();
 
         if (await errorMessageLocator.isVisible()) {
-            console.log("Error Detected: " + url);
-            await page.screenshot({ path: filePath,  fullPage: true });
-            return;
+            throw new Error("Error Detected: " + url);
+            // await page.screenshot({ path: filePath,  fullPage: true });
         }
     };
 
