@@ -227,6 +227,8 @@ test('backend admin login - skip setup', async ({ page }) => {
 
 test('company and service pages - skip setup', async ({ page }) => {
   
+  const errorMessageLocator = page.getByText("This page can't load Google Maps correctly.").first();
+
   await page.goto(elements.baseURL);
   await page.getByRole('link', { name: 'About Us' }).click();
   await expect(page).toHaveURL(elements.baseURL + '/about-us');
@@ -243,6 +245,12 @@ test('company and service pages - skip setup', async ({ page }) => {
   await sleep(1000);
   await page.getByLabel('Footer').getByRole('link', { name: 'Store Locator' }).getByText('Store Locator').click();
   await expect(page).toHaveURL(elements.baseURL + '/store-locator');
+
+  await sleep(10000)
+
+  if (await errorMessageLocator.isVisible()) {
+    throw new Error("Store Locator");
+}
   // await page.getByRole('link', { name: 'Contact Us' }).click();
   // await expect(page).toHaveURL(elements.baseURL + '/contact');
   await page.getByRole('link', { name: 'Direct Sales' }).click();
