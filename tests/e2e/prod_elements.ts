@@ -69,49 +69,89 @@ export async function next_page(page: any): Promise<void> {
 
     let pageNumber = 1;
     const maxPage = 10;
-    let random = randomtext("5");
-    let url = page.url();
     const errorMessageLocator = page.getByText('Error fetching Product List!').first();
 
-    // const directory = './ErrorFetching_screenshots';
-    // const fileName = `${random}.png`; // dynamic file name
-    // const filePath = path.join(directory, fileName); // Combines directory & filename into a full path
-    
-
-    // if (!fs.existsSync(directory)) {
-    //     fs.mkdirSync(directory);
-    // }
-
     while (pageNumber <= maxPage) {
-
         const pageStr = `Page ${pageNumber}`;
 
         const element = page.locator(`a[aria-label="${pageStr}"]`);
-        await element.waitFor({ state: 'visible' });
 
-        await element.click();
-        console.log(`Clicked page ${pageNumber}`);
+        // Start polling for both the error and the page link
+        let isErrorVisible = false;
+        const startTime = Date.now();
+        const maxWaitTime = 10000; // Wait up to 10 seconds for the element or error
+
+        // Polling loop
+        while (Date.now() - startTime < maxWaitTime) {
+            // Check if the error message is visible
+            if (await errorMessageLocator.isVisible()) {
+                isErrorVisible = true;
+                console.error('Error detected: Error fetching Product List!');
+                throw new Error(`Error found while navigating to page ${pageNumber}`);
+            }
+
+            // Check if the page link is visible
+            if (await element.isVisible()) {
+                break; // Exit the polling loop once the element is found
+            }
+
+            // Optional: Wait briefly before the next poll (avoid tight loops)
+            await page.waitForTimeout(200);
+        }
+
+        // If the error was detected, the function will have thrown an error already
+        if (isErrorVisible) break;
+
+        // Click the page navigation link
+        try {
+            await element.click();
+            console.log(`Clicked page ${pageNumber}`);
+        } catch (error) {
+            console.error(`Error clicking page ${pageNumber}:`, error);
+            throw new Error(`Failed to navigate to page ${pageNumber}`);
+        }
+
+        // Increment page number for the next iteration
         pageNumber++;
-        
-        }
-        if (await errorMessageLocator.isVisible()) {
-            // await page.screenshot({ path: filePath,  fullPage: true });
-            throw new Error("Error Detected: " + url);
-        }
-        // Check if max page has been reached
-        if (pageNumber >= maxPage) {
-            console.log(`Max page reached: ${maxPage}`);
-            return; 
-        }
 
-        const nextElement = page.locator(`a[aria-label="Page ${pageNumber}"]`);
-    
-        if (!(await nextElement.isVisible({timeout: 3000}))) {
-            console.log('There are no more pages');
-            page.close();
-        }
-        
+        // Wait for the page to fully load after the click (removed: unstable)
+        // await page.waitForLoadState('networkidle');
+    }
 };
+
+
+// -------------------------------------------------
+    // while (pageNumber <= maxPage) {
+
+    //     const pageStr = `Page ${pageNumber}`;
+
+    //     const element = page.locator(`a[aria-label="${pageStr}"]`);
+    //     await element.waitFor({ state: 'visible' });
+
+    //     await element.click();
+    //     console.log(`Clicked page ${pageNumber}`);
+    //     pageNumber++;
+
+    //     await sleep(1000);
+        
+        
+    //     if (await errorMessageLocator.isVisible()) {
+    //         // await page.screenshot({ path: filePath,  fullPage: true });
+    //         throw new Error(url);
+    //     }
+        // // Check if max page has been reached
+        // if (pageNumber >= maxPage) {
+        //     console.log(`Max page reached: ${maxPage}`);
+        //     return; 
+        // }
+
+        // const nextElement = page.locator(`a[aria-label="Page ${pageNumber}"]`);
+    
+        // if (!(await nextElement.isVisible({timeout: 3000}))) {
+        //     console.log('There are no more pages');
+        //     page.close();
+        // }
+
 
 export async function BlogErrorChecker(page: any) {
 
