@@ -12,13 +12,9 @@ test('Error Fetching / Bestsellers', async ({page}) => {
 
   console.log("-----BESTSELLER-----");
 
-  const sort = SortBy(page);
+  await SortBy(page);
 
-  await sort;
-
-  const n_page = next_page(page);
-
-  await n_page;
+  await next_page(page);
   
 });
 
@@ -30,13 +26,9 @@ test('Error Fetching / Collections', async ({page}) => {
 
   console.log("-----COLLECTIONS-----");
 
-  const sort = SortBy(page);
+  await SortBy(page);
 
-  await sort;
-
-  const n_page = next_page(page);
-
-  await n_page;
+  await next_page(page);
   
 });
 
@@ -48,13 +40,9 @@ test('Error Fetching / New', async ({page}) => {
 
   console.log("-----NEW-----");
 
-  const sort = SortBy(page);
+  await SortBy(page);
 
-  await sort;
-
-  const n_page = next_page(page);
-
-  await n_page;
+  await next_page(page);
   
 });
 
@@ -66,13 +54,9 @@ test('Error Fetching / Pre-Order', async ({page}) => {
 
   console.log("-----PRE-ORDERS-----");
 
-  const sort = SortBy(page);
+  await SortBy(page);
 
-  await sort;
-
-  const n_page = next_page(page);
-
-  await n_page;
+  await next_page(page);
   
 });
 
@@ -84,13 +68,9 @@ test('Error Fetching / Sale', async ({page}) => {
 
   console.log("-----SALE-----");
 
-  const sort = SortBy(page);
+  await SortBy(page);
 
-  await sort;
-
-  const n_page = next_page(page);
-
-  await n_page;
+  await next_page(page);
   
 });
 
